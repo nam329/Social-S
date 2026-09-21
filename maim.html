@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social S</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, "Noto Sans KR", sans-serif;
+    background: #0b0b0d;
+    color: #f5f5f5;
+    min-height: 100vh;
+}
+
+/* HEADER */
+header {
+    height: 72px;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #242428;
+    background: #0b0b0d;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.login-btn {
+    margin-left: auto;
+    padding: 10px 18px;
+    border: 1px solid #44444b;
+    background: #151519;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: .2s;
+}
+
+.login-btn:hover {
+    background: #222228;
+    border-color: #777780;
+}
+
+/* MAIN */
+main {
+    width: min(1200px, calc(100% - 40px));
+    margin: 38px auto 80px;
+}
+
+/* WELCOME */
+.welcome {
+    padding: 34px;
+    border: 1px solid #242428;
+    border-radius: 14px;
+    background: #111114;
+    margin-bottom: 25px;
+}
+
+.welcome h1 {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.welcome p {
+    color: #9b9ba3;
+    font-size: 15px;
+}
+
+/* SEARCH */
+.search-box {
+    display: flex;
+    margin-bottom: 28px;
+}
+
+.search-box input {
+    flex: 1;
+    height: 48px;
+    padding: 0 16px;
+    background: #111114;
+    color: white;
+    border: 1px solid #29292e;
+    border-radius: 9px 0 0 9px;
+    outline: none;
+}
+
+.search-box input:focus {
+    border-color: #55555e;
+}
+
+.search-box button {
+    width: 75px;
+    border: 1px solid #29292e;
+    border-left: 0;
+    background: #19191d;
+    color: white;
+    border-radius: 0 9px 9px 0;
+    cursor: pointer;
+}
+
+/* CATEGORY */
+.category-title {
+    font-size: 19px;
+    margin-bottom: 13px;
+}
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.category {
+    padding: 20px;
+    background: #111114;
+    border: 1px solid #242428;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.category:hover {
+    background: #17171b;
+    transform: translateY(-2px);
+}
+
+.category h3 {
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+.category p {
+    color: #85858d;
+    font-size: 13px;
+}
+
+/* POSTS */
+.posts {
+    margin-top: 35px;
+}
+
+.post {
+    padding: 20px;
+    background: #111114;
+    border: 1px solid #242428;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.post:hover {
+    background: #16161a;
+}
+
+.post-title {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.post-info {
+    color: #777780;
+    font-size: 12px;
+}
+
+/* MODAL */
+.modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+}
+
+.modal {
+    width: min(420px, calc(100% - 30px));
+    background: #111114;
+    border: 1px solid #303036;
+    border-radius: 14px;
+    padding: 28px;
+}
+
+.modal h2 {
+    margin-bottom: 20px;
+}
+
+.modal input {
+    width: 100%;
+    height: 46px;
+    margin-bottom: 10px;
+    padding: 0 13px;
+    background: #0b0b0d;
+    border: 1px solid #303036;
+    color: white;
+    border-radius: 7px;
+    outline: none;
+}
+
+.modal button {
+    width: 100%;
+    height: 46px;
+    border: 0;
+    border-radius: 7px;
+    background: #fff;
+    color: #111;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.close {
+    text-align: right;
+    color: #888;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+/* USER */
+.user-area {
+    margin-left: auto;
+    display: none;
+    align-items: center;
+    gap: 8px;
+}
+
+.profile-btn,
+.logout-btn {
+    padding: 9px 13px;
+    border-radius: 7px;
+    border: 1px solid #333338;
+    background: #151519;
+    color: white;
+    cursor: pointer;
+}
+
+.profile-btn:hover,
+.logout-btn:hover {
+    background: #222228;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+
+    header {
+        padding: 0 18px;
+    }
+
+    main {
+        width: calc(100% - 24px);
+        margin-top: 22px;
+    }
+
+    .welcome {
+        padding: 24px;
+    }
+
+    .welcome h1 {
+        font-size: 25px;
+    }
+
+    .categories {
+        grid-template-columns: 1fr;
+    }
+
+    .user-area {
+        gap: 5px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">Social S</div>
+
+    <button class="login-btn" id="loginButton">
+        「로그인」
+    </button>
+
+    <div class="user-area" id="userArea">
+        <button class="profile-btn" onclick="openProfile()">
+            프로필
+        </button>
+
+        <button class="logout-btn" onclick="logout()">
+            로그아웃
+        </button>
+    </div>
+
+</header>
+
+
+<main>
+
+    <section class="welcome">
+        <h1>Social S</h1>
+        <p>사람들이 모여 이야기하고 소통하는 커뮤니티</p>
+    </section>
+
+
+    <div class="search-box">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="게시글이나 내용을 검색하세요"
+        >
+        <button onclick="searchPosts()">검색</button>
+    </div>
+
+
+    <h2 class="category-title">커뮤니티</h2>
+
+    <div class="categories">
+
+        <div class="category" onclick="openBoard('자유게시판')">
+            <h3>자유게시판</h3>
+            <p>자유롭게 이야기를 나눠보세요.</p>
+        </div>
+
+        <div class="category" onclick="openBoard('그룹')">
+            <h3>그룹</h3>
+            <p>관심사가 같은 사람들과 함께하세요.</p>
+        </div>
+
+        <div class="category" onclick="openBoard('인기글')">
+            <h3>인기글</h3>
+            <p>지금 가장 인기 있는 게시글입니다.</p>
+        </div>
+
+        <div class="category" onclick="openBoard('질문 & 답변')">
+            <h3>질문 & 답변</h3>
+            <p>궁금한 것을 질문해보세요.</p>
+        </div>
+
+        <div class="category" onclick="openBoard('정보')">
+            <h3>정보</h3>
+            <p>유용한 정보를 공유해보세요.</p>
+        </div>
+
+        <div class="category" onclick="openBoard('유머')">
+            <h3>유머</h3>
+            <p>재미있는 이야기를 공유하세요.</p>
+        </div>
+
+        <div class="category" onclick="openBoard('사진')">
+            <h3>사진</h3>
+            <p>사진과 작품을 올려보세요.</p>
+        </div>
+
+        <div class="category" onclick="openBoard('게임')">
+            <h3>게임</h3>
+            <p>게임 이야기를 나눠보세요.</p>
+        </div>
+
+        <div class="category" onclick="openBoard('창작')">
+            <h3>창작</h3>
+            <p>직접 만든 작품을 공유하세요.</p>
+        </div>
+
+        <div class="category" onclick="openBoard('공지사항')">
+            <h3>공지사항</h3>
+            <p>Social S의 중요한 소식을 확인하세요.</p>
+        </div>
+
+    </div>
+
+
+    <section class="posts">
+
+        <h2 class="category-title">최근 게시글</h2>
+
+        <div class="post" onclick="postClick('Social S에 오신 것을 환영합니다!')">
+            <div class="post-title">
+                Social S에 오신 것을 환영합니다!
+            </div>
+            <div class="post-info">
+                Social S · 공지사항
+            </div>
+        </div>
+
+        <div class="post" onclick="postClick('여러분은 어떤 게임을 좋아하나요?')">
+            <div class="post-title">
+                여러분은 어떤 게임을 좋아하나요?
+            </div>
+            <div class="post-info">
+                익명 · 게임
+            </div>
+        </div>
+
+        <div class="post" onclick="postClick('새로운 그룹을 만들어봤어요')">
+            <div class="post-title">
+                새로운 그룹을 만들어봤어요
+            </div>
+            <div class="post-info">
+                Social S · 그룹
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- LOGIN MODAL -->
+
+<div class="modal-bg" id="loginModal">
+
+    <div class="modal">
+
+        <div class="close" onclick="closeLogin()">✕</div>
+
+        <h2>로그인</h2>
+
+        <input
+            type="text"
+            id="username"
+            placeholder="닉네임"
+        >
+
+        <input
+            type="password"
+            id="password"
+            placeholder="비밀번호"
+        >
+
+        <button onclick="login()">
+            로그인
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* LOGIN */
+
+const loginButton = document.getElementById("loginButton");
+const loginModal = document.getElementById("loginModal");
+const userArea = document.getElementById("userArea");
+
+loginButton.addEventListener("click", () => {
+    loginModal.style.display = "flex";
+});
+
+function closeLogin() {
+    loginModal.style.display = "none";
+}
+
+function login() {
+
+    const username =
+        document.getElementById("username").value.trim();
+
+    const password =
+        document.getElementById("password").value.trim();
+
+    if (!username || !password) {
+        alert("닉네임과 비밀번호를 입력해주세요.");
+        return;
+    }
+
+    localStorage.setItem("socialS_user", username);
+
+    loginModal.style.display = "none";
+
+    updateLogin();
+
+    alert(username + "님, 환영합니다!");
+}
+
+
+/* LOGIN STATE */
+
+function updateLogin() {
+
+    const user =
+        localStorage.getItem("socialS_user");
+
+    if (user) {
+
+        loginButton.style.display = "none";
+        userArea.style.display = "flex";
+
+    } else {
+
+        loginButton.style.display = "block";
+        userArea.style.display = "none";
+
+    }
+}
+
+
+/* LOGOUT */
+
+function logout() {
+
+    localStorage.removeItem("socialS_user");
+
+    updateLogin();
+
+    alert("로그아웃되었습니다.");
+}
+
+
+/* PROFILE */
+
+function openProfile() {
+
+    const user =
+        localStorage.getItem("socialS_user");
+
+    if (!user) return;
+
+    alert(
+        "프로필\n\n" +
+        "닉네임: " + user +
+        "\n\n배지 시스템은 다음 버전에서 추가됩니다."
+    );
+}
+
+
+/* BOARD */
+
+function openBoard(board) {
+
+    alert(
+        board +
+        " 게시판입니다.\n\n" +
+        "게시판 기능은 다음 버전에서 추가됩니다."
+    );
+}
+
+
+/* POST */
+
+function postClick(title) {
+
+    alert(
+        "게시글\n\n" +
+        title +
+        "\n\n게시글 상세 페이지는 다음 버전에서 추가됩니다."
+    );
+}
+
+
+/* SEARCH */
+
+function searchPosts() {
+
+    const keyword =
+        document.getElementById("searchInput")
+        .value
+        .trim();
+
+    if (!keyword) {
+
+        alert("검색어를 입력해주세요.");
+        return;
+
+    }
+
+    alert(
+        "'" +
+        keyword +
+        "' 검색 결과를 불러옵니다."
+    );
+}
+
+
+/* CLOSE MODAL WHEN CLICKING OUTSIDE */
+
+loginModal.addEventListener("click", function(e) {
+
+    if (e.target === loginModal) {
+        closeLogin();
+    }
+
+});
+
+
+/* START */
+
+updateLogin();
+
+</script>
+
+</body>
+</html>
