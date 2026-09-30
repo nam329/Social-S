@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Social H - Profile</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, "Noto Sans KR", sans-serif;
+    background: #f4f5f7;
+    color: #202124;
+}
+
+/* HEADER */
+.header {
+    height: 64px;
+    background: white;
+    border-bottom: 1px solid #e2e5e9;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 28px;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 800;
+    text-decoration: none;
+    color: #202124;
+}
+
+.home-btn {
+    text-decoration: none;
+    color: #202124;
+
+    border: 1px solid #d9dce1;
+    background: white;
+
+    padding: 9px 15px;
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* MAIN */
+.container {
+    width: min(1000px, calc(100% - 30px));
+    margin: 30px auto 60px;
+}
+
+/* PROFILE */
+.profile-card {
+    background: white;
+    border: 1px solid #e2e5e9;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+/* COVER */
+.cover {
+    height: 190px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #17191c,
+            #30343a
+        );
+}
+
+/* PROFILE INFO */
+.profile-info {
+    padding: 0 30px 28px;
+}
+
+/* PROFILE PHOTO */
+.profile-photo-wrap {
+    position: relative;
+
+    width: 120px;
+    height: 120px;
+
+    margin-top: -60px;
+}
+
+.profile-photo {
+    width: 120px;
+    height: 120px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    border: 5px solid white;
+
+    background: #ddd;
+}
+
+/* PHOTO EDIT */
+.photo-edit {
+    position: absolute;
+
+    right: 2px;
+    bottom: 4px;
+
+    width: 34px;
+    height: 34px;
+
+    border-radius: 50%;
+
+    background: #202124;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    border: 3px solid white;
+
+    font-size: 14px;
+}
+
+.photo-edit input {
+    display: none;
+}
+
+/* NAME */
+.name-row {
+    display: flex;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 15px;
+}
+
+/* BADGE IMAGE */
+.profile-badge {
+    width: 38px;
+    height: 28px;
+
+    object-fit: contain;
+
+    border-radius: 5px;
+
+    background: #eeeeee;
+
+    border: 1px solid #ddd;
+
+    display: none;
+}
+
+/* NICKNAME */
+.nickname {
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.username {
+    margin-top: 5px;
+
+    color: #777;
+
+    font-size: 14px;
+}
+
+.description {
+    margin-top: 12px;
+
+    color: #555;
+
+    line-height: 1.6;
+
+    font-size: 15px;
+}
+
+/* BUTTONS */
+.profile-buttons {
+    display: flex;
+
+    gap: 9px;
+
+    margin-top: 20px;
+
+    flex-wrap: wrap;
+}
+
+.profile-button {
+    border: 1px solid #d9dce1;
+
+    background: white;
+
+    border-radius: 8px;
+
+    padding: 10px 17px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+}
+
+.profile-button:hover {
+    background: #f2f3f5;
+}
+
+.edit-button {
+    background: #202124;
+    color: white;
+
+    border-color: #202124;
+}
+
+/* STATS */
+.stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    border-top: 1px solid #e5e6e8;
+
+    margin-top: 25px;
+}
+
+.stat {
+    text-align: center;
+
+    padding: 18px 10px;
+
+    border-right: 1px solid #e5e6e8;
+}
+
+.stat:last-child {
+    border-right: none;
+}
+
+.stat-number {
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.stat-title {
+    margin-top: 4px;
+
+    color: #777;
+
+    font-size: 13px;
+}
+
+/* CONTENT */
+.content-grid {
+    display: grid;
+
+    grid-template-columns:
+        1fr 310px;
+
+    gap: 20px;
+
+    margin-top: 20px;
+}
+
+.section {
+    background: white;
+
+    border: 1px solid #e2e5e9;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+}
+
+.section-title {
+    padding: 20px 22px;
+
+    border-bottom:
+        1px solid #e5e6e8;
+
+    font-size: 18px;
+
+    font-weight: 800;
+}
+
+/* POSTS */
+.post {
+    padding: 19px 22px;
+
+    border-bottom:
+        1px solid #eeeeef;
+}
+
+.post:last-child {
+    border-bottom: none;
+}
+
+.post-title {
+    font-weight: 700;
+
+    font-size: 16px;
+}
+
+.post-info {
+    margin-top: 8px;
+
+    color: #888;
+
+    font-size: 12px;
+}
+
+/* BADGES */
+.badges {
+    padding: 20px;
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+}
+
+.big-badge {
+    border: 1px solid #dedfe2;
+
+    border-radius: 9px;
+
+    padding: 12px 15px;
+
+    background: #fafafa;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.big-badge img {
+    width: 42px;
+    height: 30px;
+
+    object-fit: contain;
+
+    border-radius: 4px;
+}
+
+.big-badge-name {
+    font-size: 14px;
+
+    font-weight: 800;
+}
+
+.big-badge-desc {
+    color: #888;
+
+    font-size: 11px;
+
+    margin-top: 4px;
+}
+
+/* INFO */
+.info-list {
+    padding: 10px 20px 20px;
+}
+
+.info-item {
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 13px 0;
+
+    border-bottom:
+        1px solid #eee;
+
+    font-size: 14px;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    color: #888;
+}
+
+.info-value {
+    font-weight: 600;
+
+    text-align: right;
+}
+
+/* MODAL */
+.modal-bg {
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(0,0,0,.55);
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    z-index: 999;
+}
+
+.modal-bg.show {
+    display: flex;
+}
+
+.modal {
+    width: min(460px, 100%);
+
+    background: white;
+
+    border-radius: 14px;
+
+    padding: 25px;
+}
+
+.modal h2 {
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    margin-bottom: 7px;
+}
+
+.input-group input,
+.input-group textarea {
+    width: 100%;
+
+    border: 1px solid #d8dbe0;
+
+    border-radius: 8px;
+
+    padding: 11px;
+
+    font-family: inherit;
+
+    outline: none;
+}
+
+.input-group textarea {
+    min-height: 90px;
+
+    resize: vertical;
+}
+
+/* GALLERY BUTTON */
+.gallery-button {
+    width: 100%;
+
+    border: 1px solid #d8dbe0;
+
+    background: #f7f7f8;
+
+    border-radius: 8px;
+
+    padding: 11px;
+
+    cursor: pointer;
+
+    font-weight: 700;
+
+    text-align: center;
+
+    display: block;
+}
+
+.gallery-button:hover {
+    background: #eeeeef;
+}
+
+/* PREVIEW */
+.preview {
+    width: 90px;
+    height: 70px;
+
+    object-fit: contain;
+
+    border-radius: 8px;
+
+    border: 1px solid #ddd;
+
+    margin-top: 10px;
+
+    display: none;
+}
+
+/* MODAL BUTTON */
+.modal-buttons {
+    display: flex;
+
+    gap: 8px;
+
+    justify-content: flex-end;
+
+    margin-top: 20px;
+}
+
+.modal-buttons button {
+    border: 0;
+
+    border-radius: 8px;
+
+    padding: 10px 16px;
+
+    cursor: pointer;
+
+    font-weight: 700;
+}
+
+.cancel {
+    background: #eee;
+}
+
+.save {
+    background: #202124;
+
+    color: white;
+}
+
+/* MOBILE */
+@media (max-width: 760px) {
+
+    .header {
+        height: 58px;
+
+        padding: 0 15px;
+    }
+
+    .logo {
+        font-size: 21px;
+    }
+
+    .container {
+        width:
+            calc(100% - 20px);
+
+        margin-top: 15px;
+    }
+
+    .cover {
+        height: 135px;
+    }
+
+    .profile-info {
+        padding:
+            0 18px 22px;
+    }
+
+    .profile-photo-wrap {
+        width: 95px;
+        height: 95px;
+
+        margin-top: -48px;
+    }
+
+    .profile-photo {
+        width: 95px;
+        height: 95px;
+    }
+
+    .nickname {
+        font-size: 23px;
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 420px) {
+
+    .profile-buttons {
+        display: grid;
+
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .profile-button {
+        width: 100%;
+    }
+
+    .profile-badge {
+        width: 32px;
+        height: 24px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <a href="index.html" class="logo">
+        Social H
+    </a>
+
+    <a href="index.html" class="home-btn">
+        홈으로
+    </a>
+
+</header>
+
+
+<main class="container">
+
+<section class="profile-card">
+
+    <div class="cover"></div>
+
+    <div class="profile-info">
+
+        <!-- PROFILE PHOTO -->
+
+        <div class="profile-photo-wrap">
+
+            <img
+                id="profilePhoto"
+                class="profile-photo"
+                src=""
+                alt="프로필 사진"
+            >
+
+            <label class="photo-edit">
+
+                ✎
+
+                <input
+                    id="photoInput"
+                    type="file"
+                    accept="image/*"
+                >
+
+            </label>
+
+        </div>
+
+
+        <!-- NAME + BADGE -->
+
+        <div class="name-row">
+
+            <img
+                id="profileBadge"
+                class="profile-badge"
+                src=""
+                alt="뱃지"
+            >
+
+            <span
+                id="nickname"
+                class="nickname"
+            >
+                Social H 사용자
+            </span>
+
+        </div>
+
+
+        <div
+            id="username"
+            class="username"
+        >
+            @socialh_user
+        </div>
+
+
+        <p
+            id="description"
+            class="description"
+        >
+            Social H에서 활동하고 있습니다.
+        </p>
+
+
+        <div class="profile-buttons">
+
+            <button
+                class="profile-button edit-button"
+                onclick="openEdit()"
+            >
+                프로필 수정
+            </button>
+
+            <button
+                class="profile-button"
+                onclick="location.href='index.html'"
+            >
+                게시판으로
+            </button>
+
+        </div>
+
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <div
+                    id="postCount"
+                    class="stat-number"
+                >
+                    0
+                </div>
+
+                <div class="stat-title">
+                    작성글
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div
+                    id="badgeCount"
+                    class="stat-number"
+                >
+                    0
+                </div>
+
+                <div class="stat-title">
+                    뱃지
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-number">
+                    0
+                </div>
+
+                <div class="stat-title">
+                    그룹
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<div class="content-grid">
+
+
+<!-- POSTS -->
+
+<section class="section">
+
+    <div class="section-title">
+        작성한 글
+    </div>
+
+    <div id="posts">
+
+        <div class="post">
+
+            <div class="post-title">
+                아직 작성한 글이 없습니다.
+            </div>
+
+            <div class="post-info">
+                Social H
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- RIGHT -->
+
+<div>
+
+<section class="section">
+
+    <div class="section-title">
+        보유 뱃지
+    </div>
+
+    <div
+        id="badgeList"
+        class="badges"
+    >
+
+        <div class="big-badge">
+
+            <div>
+                아직 뱃지가 없습니다.
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section
+    class="section"
+    style="margin-top:20px;"
+>
+
+    <div class="section-title">
+        회원 정보
+    </div>
+
+    <div class="info-list">
+
+        <div class="info-item">
+
+            <span class="info-label">
+                닉네임
+            </span>
+
+            <span
+                id="infoNickname"
+                class="info-value"
+            >
+                Social H 사용자
+            </span>
+
+        </div>
+
+
+        <div class="info-item">
+
+            <span class="info-label">
+                아이디
+            </span>
+
+            <span
+                id="infoUsername"
+                class="info-value"
+            >
+                @socialh_user
+            </span>
+
+        </div>
+
+
+        <div class="info-item">
+
+            <span class="info-label">
+                가입일
+            </span>
+
+            <span
+                id="joinDate"
+                class="info-value"
+            >
+                -
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+</div>
+
+</div>
+
+</main>
+
+
+<!-- PROFILE EDIT MODAL -->
+
+<div
+    id="modalBg"
+    class="modal-bg"
+>
+
+<div class="modal">
+
+<h2>
+    프로필 수정
+</h2>
+
+
+<div class="input-group">
+
+<label>
+    닉네임
+</label>
+
+<input
+    id="editNickname"
+    type="text"
+    maxlength="20"
+    placeholder="닉네임"
+/>
+
+</div>
+
+
+<div class="input-group">
+
+<label>
+    프로필 사진
+</label>
+
+<label class="gallery-button">
+
+    📷 갤러리에서 사진 선택
+
+    <input
+        id="editPhotoInput"
+        type="file"
+        accept="image/*"
+        hidden
+    >
+
+</label>
+
+<img
+    id="photoPreview"
+    class="preview"
+    alt="프로필 사진 미리보기"
+/>
+
+</div>
+
+
+<div class="input-group">
+
+<label>
+    소개
+</label>
+
+<textarea
+    id="editDescription"
+    maxlength="150"
+    placeholder="자신을 소개해주세요."
+></textarea>
+
+</div>
+
+
+<div class="modal-buttons">
+
+<button
+    class="cancel"
+    onclick="closeEdit()"
+>
+    취소
+</button>
+
+<button
+    class="save"
+    onclick="saveProfile()"
+>
+    저장
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/*
+====================================================
+Social H Profile
+====================================================
+
+현재 버전:
+
+- 프로필 사진 갤러리 선택
+- 프로필 사진 미리보기
+- 프로필 사진 저장
+- 닉네임
+- 자기소개
+- 뱃지 이미지 표시
+- 뱃지 목록 표시
+- 모바일 대응
+
+현재 데이터 저장은 localStorage입니다.
+
+나중에 Cloudflare 백엔드와 연결하면
+회원별로 서버에 저장할 수 있습니다.
+====================================================
+*/
+
+
+const defaultProfile = {
+
+    nickname: "Social H 사용자",
+
+    username: "socialh_user",
+
+    description:
+        "Social H에서 활동하고 있습니다.",
+
+    photo: "",
+
+    joinDate:
+        "2026.10.01",
+
+    badges: []
+
+};
+
+
+/* 기본 프로필 이미지 */
+
+function createDefaultAvatar() {
+
+    const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="300"
+         height="300">
+
+        <rect
+            width="300"
+            height="300"
+            fill="#dddddd"
+        />
+
+        <circle
+            cx="150"
+            cy="115"
+            r="55"
+            fill="#aaaaaa"
+        />
+
+        <path
+            d="M55 285
+               C55 210 105 180 150 180
+               C195 180 245 210 245 285"
+            fill="#aaaaaa"
+        />
+
+    </svg>
+    `;
+
+    return "data:image/svg+xml;charset=UTF-8," +
+        encodeURIComponent(svg);
+}
+
+
+/* 프로필 불러오기 */
+
+function getProfile() {
+
+    const saved =
+        localStorage.getItem(
+            "socialHProfile"
+        );
+
+    if (!saved) {
+
+        return defaultProfile;
+
+    }
+
+    try {
+
+        return JSON.parse(saved);
+
+    } catch {
+
+        return defaultProfile;
+
+    }
+
+}
+
+
+/* 프로필 표시 */
+
+function loadProfile() {
+
+    const profile =
+        getProfile();
+
+
+    document
+        .getElementById("nickname")
+        .textContent =
+        profile.nickname;
+
+
+    document
+        .getElementById("username")
+        .textContent =
+        "@" + profile.username;
+
+
+    document
+        .getElementById("description")
+        .textContent =
+        profile.description;
+
+
+    document
+        .getElementById("infoNickname")
+        .textContent =
+        profile.nickname;
+
+
+    document
+        .getElementById("infoUsername")
+        .textContent =
+        "@" + profile.username;
+
+
+    document
+        .getElementById("joinDate")
+        .textContent =
+        profile.joinDate || "-";
+
+
+    /* PROFILE PHOTO */
+
+    const photo =
+        document.getElementById(
+            "profilePhoto"
+        );
+
+    if (profile.photo) {
+
+        photo.src =
+            profile.photo;
+
+    } else {
+
+        photo.src =
+            createDefaultAvatar();
+
+    }
+
+
+    /* MAIN BADGE */
+
+    const badge =
+        document.getElementById(
+            "profileBadge"
+        );
+
+
+    if (
+        profile.badges &&
+        profile.badges.length > 0
+    ) {
+
+        badge.src =
+            profile.badges[0].image;
+
+        badge.style.display =
+            "inline-block";
+
+    } else {
+
+        badge.style.display =
+            "none";
+
+    }
+
+
+    /* BADGE COUNT */
+
+    document
+        .getElementById("badgeCount")
+        .textContent =
+        profile.badges
+            ? profile.badges.length
+            : 0;
+
+
+    /* BADGE LIST */
+
+    const badgeList =
+        document.getElementById(
+            "badgeList"
+        );
+
+
+    badgeList.innerHTML = "";
+
+
+    if (
+        !profile.badges ||
+        profile.badges.length === 0
+    ) {
+
+        badgeList.innerHTML = `
+
+            <div class="big-badge">
+
+                <div>
+                    아직 뱃지가 없습니다.
+                </div>
+
+            </div>
+
+        `;
+
+    } else {
+
+        profile.badges.forEach(
+            badgeData => {
+
+                const div =
+                    document.createElement(
+                        "div"
+                    );
+
+                div.className =
+                    "big-badge";
+
+
+                div.innerHTML = `
+
+                    <img
+                        src="${badgeData.image}"
+                        alt="뱃지"
+                    >
+
+                    <div>
+
+                        <div
+                            class="big-badge-name"
+                        >
+                            ${badgeData.name}
+                        </div>
+
+                        <div
+                            class="big-badge-desc"
+                        >
+                            관리자 지급
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                badgeList.appendChild(
+                    div
+                );
+
+            }
+        );
+
+    }
+
+
+    /* EDIT FORM */
+
+    document
+        .getElementById(
+            "editNickname"
+        )
+        .value =
+        profile.nickname;
+
+
+    document
+        .getElementById(
+            "editDescription"
+        )
+        .value =
+        profile.description;
+
+
+    if (profile.photo) {
+
+        document
+            .getElementById(
+                "photoPreview"
+            )
+            .src =
+            profile.photo;
+
+        document
+            .getElementById(
+                "photoPreview"
+            )
+            .style.display =
+            "block";
+
+    }
+
+}
+
+
+/* PROFILE EDIT */
+
+function openEdit() {
+
+    document
+        .getElementById("modalBg")
+        .classList.add("show");
+
+}
+
+
+function closeEdit() {
+
+    document
+        .getElementById("modalBg")
+        .classList.remove("show");
+
+}
+
+
+/* PHOTO FILE */
+
+let selectedPhoto = null;
+
+
+document
+    .getElementById(
+        "editPhotoInput"
+    )
+    .addEventListener(
+        "change",
+        function() {
+
+            const file =
+                this.files[0];
+
+            if (!file) {
+                return;
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(e) {
+
+                    selectedPhoto =
+                        e.target.result;
+
+
+                    const preview =
+                        document
+                        .getElementById(
+                            "photoPreview"
+                        );
+
+
+                    preview.src =
+                        selectedPhoto;
+
+
+                    preview.style.display =
+                        "block";
+
+                };
+
+
+            reader.readAsDataURL(file);
+
+        }
+    );
+
+
+/* 작은 프로필 사진 버튼 */
+
+document
+    .getElementById(
+        "photoInput"
+    )
+    .addEventListener(
+        "change",
+        function() {
+
+            const file =
+                this.files[0];
+
+            if (!file) {
+                return;
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(e) {
+
+                    const profile =
+                        getProfile();
+
+
+                    profile.photo =
+                        e.target.result;
+
+
+                    localStorage.setItem(
+                        "socialHProfile",
+                        JSON.stringify(
+                            profile
+                        )
+                    );
+
+
+                    loadProfile();
+
+                };
+
+
+            reader.readAsDataURL(file);
+
+        }
+    );
+
+
+/* SAVE PROFILE */
+
+function saveProfile() {
+
+    const profile =
+        getProfile();
+
+
+    const nickname =
+        document
+        .getElementById(
+            "editNickname"
+        )
+        .value
+        .trim();
+
+
+    const description =
+        document
+        .getElementById(
+            "editDescription"
+        )
+        .value
+        .trim();
+
+
+    if (!nickname) {
+
+        alert(
+            "닉네임을 입력해주세요."
+        );
+
+        return;
+
+    }
+
+
+    profile.nickname =
+        nickname;
+
+
+    profile.description =
+        description ||
+        "Social H에서 활동하고 있습니다.";
+
+
+    if (selectedPhoto) {
+
+        profile.photo =
+            selectedPhoto;
+
+    }
+
+
+    localStorage.setItem(
+        "socialHProfile",
+        JSON.stringify(
+            profile
+        )
+    );
+
+
+    selectedPhoto = null;
+
+
+    loadProfile();
+
+    closeEdit();
+
+}
+
+
+/* MODAL OUTSIDE CLICK */
+
+document
+    .getElementById(
+        "modalBg"
+    )
+    .addEventListener(
+        "click",
+        function(e) {
+
+            if (e.target === this) {
+
+                closeEdit();
+
+            }
+
+        }
+    );
+
+
+/* START */
+
+loadProfile();
+
+</script>
+
+</body>
+</html>
