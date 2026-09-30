@@ -1,309 +1,1651 @@
-async function register() {
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    const nicknameInput =
-        document.getElementById("registerNickname");
+<title>Social H</title>
 
-    const emailInput =
-        document.getElementById("registerEmail");
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
 
-    const passwordInput =
-        document.getElementById("registerPassword");
+body{
+    font-family:Arial,"Noto Sans KR",sans-serif;
+    background:#f4f5f7;
+    color:#202124;
+}
 
-    const password2Input =
-        document.getElementById("registerPassword2");
+button,input,textarea{
+    font-family:inherit;
+}
 
-    const message =
-        document.getElementById("registerMessage");
+button{
+    cursor:pointer;
+}
 
+.header{
+    height:64px;
+    background:#fff;
+    border-bottom:1px solid #e3e5e8;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 28px;
+
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.logo{
+    color:#202124;
+    text-decoration:none;
+
+    font-size:24px;
+    font-weight:800;
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.header-btn{
+    border:1px solid #d9dce1;
+    background:#fff;
+
+    padding:9px 14px;
+
+    border-radius:8px;
+
+    font-weight:600;
+}
+
+.header-btn:hover{
+    background:#f1f2f4;
+}
+
+.user-button{
+    display:none;
+
+    border:1px solid #d9dce1;
+    background:#fff;
+
+    padding:8px 12px;
+
+    border-radius:8px;
+
+    font-weight:700;
+}
+
+/* MAIN */
+
+.layout{
+    width:min(1200px,calc(100% - 30px));
+
+    margin:25px auto;
+
+    display:grid;
+
+    grid-template-columns:220px 1fr 250px;
+
+    gap:20px;
+}
+
+/* SIDE */
+
+.side,
+.right-box,
+.board{
+    background:#fff;
+
+    border:1px solid #e2e5e9;
+
+    border-radius:13px;
+}
+
+.side{
+    padding:10px;
+    height:max-content;
+}
+
+.menu{
+    display:block;
+
+    padding:13px 14px;
+
+    border-radius:8px;
+
+    text-decoration:none;
+
+    color:#333;
+
+    font-weight:600;
+}
+
+.menu:hover,
+.menu.active{
+    background:#f0f1f3;
+}
+
+/* BOARD */
+
+.board-header{
+    padding:22px;
+
+    border-bottom:1px solid #e6e7e9;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.board-title{
+    font-size:21px;
+    font-weight:800;
+}
+
+.write-btn{
+    border:0;
+
+    background:#202124;
+    color:white;
+
+    padding:10px 15px;
+
+    border-radius:8px;
+
+    font-weight:700;
+}
+
+.write-btn:hover{
+    background:#333;
+}
+
+/* POSTS */
+
+.post{
+    padding:18px 22px;
+
+    border-bottom:1px solid #eee;
+
+    cursor:pointer;
+}
+
+.post:last-child{
+    border-bottom:0;
+}
+
+.post:hover{
+    background:#fafafa;
+}
+
+.post-title{
+    font-size:16px;
+    font-weight:700;
+}
+
+.post-meta{
+    margin-top:7px;
+
+    color:#888;
+
+    font-size:12px;
+}
+
+.empty{
+    padding:50px 20px;
+
+    text-align:center;
+
+    color:#888;
+}
+
+/* RIGHT */
+
+.right-box{
+    padding:20px;
+    height:max-content;
+}
+
+.right-title{
+    font-size:17px;
+    font-weight:800;
+
+    margin-bottom:15px;
+}
+
+.profile-mini{
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    cursor:pointer;
+}
+
+.profile-mini-photo{
+    width:45px;
+    height:45px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    background:#ddd;
+}
+
+.profile-mini-name{
+    font-weight:800;
+}
+
+.profile-mini-id{
+    margin-top:3px;
+
+    color:#888;
+
+    font-size:12px;
+}
+
+/* MODAL */
+
+.modal-bg{
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.55);
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    z-index:999;
+}
+
+.modal-bg.show{
+    display:flex;
+}
+
+.modal{
+    width:min(470px,100%);
+
+    background:#fff;
+
+    border-radius:14px;
+
+    padding:25px;
+}
+
+.modal h2{
+    margin-bottom:20px;
+}
+
+.input-group{
+    margin-bottom:15px;
+}
+
+.input-group label{
+    display:block;
+
+    margin-bottom:7px;
+
+    font-size:13px;
+    font-weight:700;
+}
+
+.input-group input,
+.input-group textarea{
+    width:100%;
+
+    border:1px solid #d7d9dd;
+
+    border-radius:8px;
+
+    padding:11px;
+
+    outline:none;
+}
+
+.input-group textarea{
+    min-height:140px;
+
+    resize:vertical;
+}
+
+.modal-buttons{
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:8px;
+
+    margin-top:20px;
+}
+
+.modal-buttons button{
+    border:0;
+
+    border-radius:8px;
+
+    padding:10px 16px;
+
+    font-weight:700;
+}
+
+.cancel{
+    background:#eee;
+}
+
+.primary{
+    background:#202124;
+    color:#fff;
+}
+
+/* LOGIN */
+
+.login-info{
+    padding:20px;
+
+    background:#f7f7f8;
+
+    border-radius:9px;
+
+    margin-bottom:18px;
+
+    font-size:14px;
+
+    line-height:1.6;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+    .layout{
+        grid-template-columns:190px 1fr;
+    }
+
+    .right-box{
+        display:none;
+    }
+}
+
+@media(max-width:650px){
+
+    .header{
+        padding:0 14px;
+    }
+
+    .logo{
+        font-size:21px;
+    }
+
+    .header-btn{
+        padding:8px 10px;
+        font-size:12px;
+    }
+
+    .layout{
+        width:calc(100% - 20px);
+
+        grid-template-columns:1fr;
+
+        margin-top:12px;
+    }
+
+    .side{
+        display:flex;
+
+        overflow-x:auto;
+
+        gap:5px;
+
+        padding:7px;
+    }
+
+    .menu{
+        white-space:nowrap;
+
+        padding:10px 12px;
+    }
+
+    .board-header{
+        padding:17px;
+    }
+
+    .board-title{
+        font-size:18px;
+    }
+
+    .post{
+        padding:16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+<a href="index.html" class="logo">
+    Social H
+</a>
+
+<div class="header-right">
+
+<button
+    id="loginButton"
+    class="header-btn"
+    onclick="openLogin()"
+>
+    로그인
+</button>
+
+<button
+    id="signupButton"
+    class="header-btn"
+    onclick="openSignup()"
+>
+    회원가입
+</button>
+
+<button
+    id="userButton"
+    class="user-button"
+    onclick="location.href='profile.html'"
+>
+    프로필
+</button>
+
+</div>
+
+</header>
+
+
+<div class="layout">
+
+<!-- LEFT -->
+
+<nav class="side">
+
+<a
+    class="menu active"
+    href="index.html"
+>
+    자유게시판
+</a>
+
+<a
+    class="menu"
+    href="#"
+    onclick="showComingSoon('그룹')"
+>
+    그룹
+</a>
+
+<a
+    class="menu"
+    href="#"
+    onclick="showComingSoon('공지사항')"
+>
+    공지사항
+</a>
+
+</nav>
+
+
+<!-- CENTER -->
+
+<main class="board">
+
+<div class="board-header">
+
+<div class="board-title">
+    자유게시판
+</div>
+
+<button
+    class="write-btn"
+    onclick="openWrite()"
+>
+    글쓰기
+</button>
+
+</div>
+
+
+<div id="postList">
+
+<div class="empty">
+    아직 작성된 글이 없습니다.
+</div>
+
+</div>
+
+</main>
+
+
+<!-- RIGHT -->
+
+<aside class="right-box">
+
+<div class="right-title">
+    내 프로필
+</div>
+
+<div
+    id="miniProfile"
+    class="profile-mini"
+    onclick="location.href='profile.html'"
+>
+
+<img
+    id="miniPhoto"
+    class="profile-mini-photo"
+    alt="프로필"
+/>
+
+<div>
+
+<div
+    id="miniName"
+    class="profile-mini-name"
+>
+    로그인해주세요
+</div>
+
+<div
+    id="miniId"
+    class="profile-mini-id"
+>
+    -
+</div>
+
+</div>
+
+</div>
+
+</aside>
+
+</div>
+
+
+<!-- LOGIN MODAL -->
+
+<div
+    id="loginModal"
+    class="modal-bg"
+>
+
+<div class="modal">
+
+<h2>
+    로그인
+</h2>
+
+<div class="input-group">
+
+<label>
+    아이디
+</label>
+
+<input
+    id="loginId"
+    type="text"
+    placeholder="아이디"
+/>
+
+</div>
+
+<div class="input-group">
+
+<label>
+    비밀번호
+</label>
+
+<input
+    id="loginPassword"
+    type="password"
+    placeholder="비밀번호"
+/>
+
+</div>
+
+<div class="modal-buttons">
+
+<button
+    class="cancel"
+    onclick="closeModal('loginModal')"
+>
+    취소
+</button>
+
+<button
+    class="primary"
+    onclick="login()"
+>
+    로그인
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- SIGNUP MODAL -->
+
+<div
+    id="signupModal"
+    class="modal-bg"
+>
+
+<div class="modal">
+
+<h2>
+    회원가입
+</h2>
+
+<div class="input-group">
+
+<label>
+    아이디
+</label>
+
+<input
+    id="signupId"
+    type="text"
+    placeholder="아이디"
+/>
+
+</div>
+
+<div class="input-group">
+
+<label>
+    닉네임
+</label>
+
+<input
+    id="signupNickname"
+    type="text"
+    placeholder="닉네임"
+/>
+
+</div>
+
+<div class="input-group">
+
+<label>
+    비밀번호
+</label>
+
+<input
+    id="signupPassword"
+    type="password"
+    placeholder="비밀번호"
+/>
+
+</div>
+
+<div class="modal-buttons">
+
+<button
+    class="cancel"
+    onclick="closeModal('signupModal')"
+>
+    취소
+</button>
+
+<button
+    class="primary"
+    onclick="signup()"
+>
+    회원가입
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- WRITE MODAL -->
+
+<div
+    id="writeModal"
+    class="modal-bg"
+>
+
+<div class="modal">
+
+<h2>
+    글쓰기
+</h2>
+
+<div class="input-group">
+
+<label>
+    제목
+</label>
+
+<input
+    id="postTitle"
+    type="text"
+    maxlength="100"
+    placeholder="제목"
+/>
+
+</div>
+
+<div class="input-group">
+
+<label>
+    내용
+</label>
+
+<textarea
+    id="postContent"
+    maxlength="5000"
+    placeholder="내용을 입력해주세요."
+></textarea>
+
+</div>
+
+<div class="modal-buttons">
+
+<button
+    class="cancel"
+    onclick="closeModal('writeModal')"
+>
+    취소
+</button>
+
+<button
+    class="primary"
+    onclick="createPost()"
+>
+    등록
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/*
+==================================================
+Social H
+==================================================
+
+현재 버전은 localStorage 기반입니다.
+
+회원가입
+로그인
+로그아웃
+글쓰기
+글목록
+프로필 연결
+
+을 브라우저에서 작동시킵니다.
+
+실제 여러 사용자용 사이트로 만들 때는
+Cloudflare Worker + D1/KV/R2 같은
+서버 저장소와 연결해야 합니다.
+==================================================
+*/
+
+
+/* DEFAULT AVATAR */
+
+function defaultAvatar(){
+
+    const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="300"
+         height="300">
+
+        <rect
+            width="300"
+            height="300"
+            fill="#dddddd"
+        />
+
+        <circle
+            cx="150"
+            cy="110"
+            r="55"
+            fill="#aaaaaa"
+        />
+
+        <path
+            d="M50 290
+               C50 210 105 175 150 175
+               C195 175 250 210 250 290"
+            fill="#aaaaaa"
+        />
+
+    </svg>
+    `;
+
+    return "data:image/svg+xml;charset=UTF-8," +
+        encodeURIComponent(svg);
+}
+
+
+/* USERS */
+
+function getUsers(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem("socialHUsers")
+        ) || [];
+
+    }catch{
+
+        return [];
+
+    }
+
+}
+
+
+function saveUsers(users){
+
+    localStorage.setItem(
+        "socialHUsers",
+        JSON.stringify(users)
+    );
+
+}
+
+
+/* CURRENT USER */
+
+function getCurrentUser(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(
+                "socialHCurrentUser"
+            )
+        );
+
+    }catch{
+
+        return null;
+
+    }
+
+}
+
+
+function setCurrentUser(user){
+
+    if(user){
+
+        localStorage.setItem(
+            "socialHCurrentUser",
+            JSON.stringify(user)
+        );
+
+    }else{
+
+        localStorage.removeItem(
+            "socialHCurrentUser"
+        );
+
+    }
+
+}
+
+
+/* SIGNUP */
+
+function signup(){
+
+    const id =
+        document
+        .getElementById("signupId")
+        .value
+        .trim();
 
     const nickname =
-        nicknameInput.value.trim();
-
-    const email =
-        emailInput.value.trim();
+        document
+        .getElementById("signupNickname")
+        .value
+        .trim();
 
     const password =
-        passwordInput.value;
-
-    const password2 =
-        password2Input.value;
-
-
-    // 메시지 초기화
-    message.className = "message";
-    message.textContent = "";
+        document
+        .getElementById("signupPassword")
+        .value;
 
 
-    // 닉네임 검사
-    if (!nickname) {
+    if(!id || !nickname || !password){
 
-        message.className =
-            "message error";
+        alert(
+            "모든 항목을 입력해주세요."
+        );
 
-        message.textContent =
-            "닉네임을 입력해주세요.";
+        return;
 
-        nicknameInput.focus();
+    }
 
+
+    if(id.length < 3){
+
+        alert(
+            "아이디는 3자 이상 입력해주세요."
+        );
+
+        return;
+
+    }
+
+
+    if(password.length < 4){
+
+        alert(
+            "비밀번호는 4자 이상 입력해주세요."
+        );
+
+        return;
+
+    }
+
+
+    const users = getUsers();
+
+
+    if(
+        users.some(
+            user =>
+            user.id.toLowerCase()
+            === id.toLowerCase()
+        )
+    ){
+
+        alert(
+            "이미 사용 중인 아이디입니다."
+        );
+
+        return;
+
+    }
+
+
+    if(
+        users.some(
+            user =>
+            user.nickname
+            === nickname
+        )
+    ){
+
+        alert(
+            "이미 사용 중인 닉네임입니다."
+        );
+
+        return;
+
+    }
+
+
+    const user = {
+
+        id:id,
+
+        nickname:nickname,
+
+        password:password,
+
+        photo:"",
+
+        description:
+            "Social H에서 활동하고 있습니다.",
+
+        joinDate:
+            new Date()
+            .toLocaleDateString(
+                "ko-KR"
+            ),
+
+        badges:[]
+
+    };
+
+
+    users.push(user);
+
+    saveUsers(users);
+
+    setCurrentUser(user);
+
+
+    /* profile.html과 공유 */
+
+    localStorage.setItem(
+        "socialHProfile",
+        JSON.stringify(user)
+    );
+
+
+    closeModal("signupModal");
+
+    updateUI();
+
+    alert(
+        "회원가입이 완료되었습니다!"
+    );
+
+}
+
+
+/* LOGIN */
+
+function login(){
+
+    const id =
+        document
+        .getElementById("loginId")
+        .value
+        .trim();
+
+    const password =
+        document
+        .getElementById("loginPassword")
+        .value;
+
+
+    const users =
+        getUsers();
+
+
+    const user =
+        users.find(
+            u =>
+            u.id === id &&
+            u.password === password
+        );
+
+
+    if(!user){
+
+        alert(
+            "아이디 또는 비밀번호가 올바르지 않습니다."
+        );
+
+        return;
+
+    }
+
+
+    setCurrentUser(user);
+
+
+    localStorage.setItem(
+        "socialHProfile",
+        JSON.stringify(user)
+    );
+
+
+    closeModal("loginModal");
+
+    updateUI();
+
+    alert(
+        "로그인되었습니다."
+    );
+
+}
+
+
+/* LOGOUT */
+
+function logout(){
+
+    setCurrentUser(null);
+
+    updateUI();
+
+    alert(
+        "로그아웃되었습니다."
+    );
+
+}
+
+
+/* PROFILE */
+
+function updateProfileData(){
+
+    const current =
+        getCurrentUser();
+
+    if(!current){
         return;
     }
 
 
-    if (nickname.length < 2) {
+    const users =
+        getUsers();
 
-        message.className =
-            "message error";
+    const updated =
+        users.find(
+            u => u.id === current.id
+        );
 
-        message.textContent =
-            "닉네임은 2자 이상 입력해주세요.";
 
-        nicknameInput.focus();
+    if(updated){
+
+        setCurrentUser(updated);
+
+        localStorage.setItem(
+            "socialHProfile",
+            JSON.stringify(updated)
+        );
+
+    }
+
+}
+
+
+/* UI */
+
+function updateUI(){
+
+    const user =
+        getCurrentUser();
+
+
+    const loginButton =
+        document.getElementById(
+            "loginButton"
+        );
+
+    const signupButton =
+        document.getElementById(
+            "signupButton"
+        );
+
+    const userButton =
+        document.getElementById(
+            "userButton"
+        );
+
+
+    if(user){
+
+        loginButton.style.display =
+            "none";
+
+        signupButton.style.display =
+            "none";
+
+        userButton.style.display =
+            "block";
+
+        userButton.textContent =
+            user.nickname;
+
+
+        document
+        .getElementById(
+            "miniName"
+        )
+        .textContent =
+            user.nickname;
+
+
+        document
+        .getElementById(
+            "miniId"
+        )
+        .textContent =
+            "@" + user.id;
+
+
+        document
+        .getElementById(
+            "miniPhoto"
+        )
+        .src =
+            user.photo ||
+            defaultAvatar();
+
+
+    }else{
+
+        loginButton.style.display =
+            "block";
+
+        signupButton.style.display =
+            "block";
+
+        userButton.style.display =
+            "none";
+
+
+        document
+        .getElementById(
+            "miniName"
+        )
+        .textContent =
+            "로그인해주세요";
+
+
+        document
+        .getElementById(
+            "miniId"
+        )
+        .textContent =
+            "-";
+
+
+        document
+        .getElementById(
+            "miniPhoto"
+        )
+        .src =
+            defaultAvatar();
+
+    }
+
+}
+
+
+/* MODAL */
+
+function openLogin(){
+
+    document
+    .getElementById(
+        "loginModal"
+    )
+    .classList.add("show");
+
+}
+
+
+function openSignup(){
+
+    document
+    .getElementById(
+        "signupModal"
+    )
+    .classList.add("show");
+
+}
+
+
+function openWrite(){
+
+    if(!getCurrentUser()){
+
+        alert(
+            "글을 작성하려면 먼저 로그인해주세요."
+        );
+
+        openLogin();
 
         return;
+
     }
 
 
-    if (nickname.length > 20) {
+    document
+    .getElementById(
+        "writeModal"
+    )
+    .classList.add("show");
 
-        message.className =
-            "message error";
+}
 
-        message.textContent =
-            "닉네임은 20자 이하로 입력해주세요.";
 
-        nicknameInput.focus();
+function closeModal(id){
+
+    document
+    .getElementById(id)
+    .classList.remove("show");
+
+}
+
+
+/* POSTS */
+
+function getPosts(){
+
+    try{
+
+        return JSON.parse(
+            localStorage.getItem(
+                "socialHPosts"
+            )
+        ) || [];
+
+    }catch{
+
+        return [];
+
+    }
+
+}
+
+
+function savePosts(posts){
+
+    localStorage.setItem(
+        "socialHPosts",
+        JSON.stringify(posts)
+    );
+
+}
+
+
+function createPost(){
+
+    const user =
+        getCurrentUser();
+
+
+    if(!user){
+
+        alert(
+            "로그인이 필요합니다."
+        );
 
         return;
+
     }
 
 
-    // 이메일 검사
-    if (!email) {
+    const title =
+        document
+        .getElementById(
+            "postTitle"
+        )
+        .value
+        .trim();
 
-        message.className =
-            "message error";
 
-        message.textContent =
-            "이메일을 입력해주세요.";
+    const content =
+        document
+        .getElementById(
+            "postContent"
+        )
+        .value
+        .trim();
 
-        emailInput.focus();
+
+    if(!title){
+
+        alert(
+            "제목을 입력해주세요."
+        );
 
         return;
+
     }
 
 
-    const emailPattern =
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!content){
 
-
-    if (!emailPattern.test(email)) {
-
-        message.className =
-            "message error";
-
-        message.textContent =
-            "올바른 이메일 주소를 입력해주세요.";
-
-        emailInput.focus();
+        alert(
+            "내용을 입력해주세요."
+        );
 
         return;
+
     }
 
 
-    // 비밀번호 검사
-    if (!password) {
-
-        message.className =
-            "message error";
-
-        message.textContent =
-            "비밀번호를 입력해주세요.";
-
-        passwordInput.focus();
-
-        return;
-    }
+    const posts =
+        getPosts();
 
 
-    if (password.length < 6) {
+    posts.unshift({
 
-        message.className =
-            "message error";
+        id:
+            Date.now(),
 
-        message.textContent =
-            "비밀번호는 6자 이상이어야 합니다.";
+        title:title,
 
-        passwordInput.focus();
+        content:content,
 
-        return;
-    }
+        author:user.nickname,
 
+        authorId:user.id,
 
-    // 비밀번호 확인
-    if (!password2) {
-
-        message.className =
-            "message error";
-
-        message.textContent =
-            "비밀번호 확인을 입력해주세요.";
-
-        password2Input.focus();
-
-        return;
-    }
-
-
-    if (password !== password2) {
-
-        message.className =
-            "message error";
-
-        message.textContent =
-            "비밀번호가 서로 다릅니다.";
-
-        password2Input.focus();
-
-        return;
-    }
-
-
-    // 가입 처리
-    const {
-        data,
-        error
-    } = await db.auth.signUp({
-
-        email: email,
-
-        password: password,
-
-        options: {
-
-            data: {
-                nickname: nickname
-            }
-
-        }
+        date:
+            new Date()
+            .toLocaleString(
+                "ko-KR"
+            )
 
     });
 
 
-    // Supabase 오류
-    if (error) {
-
-        message.className =
-            "message error";
+    savePosts(posts);
 
 
-        const errorText =
-            error.message.toLowerCase();
+    document
+    .getElementById(
+        "postTitle"
+    )
+    .value = "";
 
 
-        if (
-            errorText.includes("already") ||
-            errorText.includes("registered")
-        ) {
-
-            message.textContent =
-                "이미 가입된 이메일입니다.";
-
-        }
-
-        else if (
-            errorText.includes("password")
-        ) {
-
-            message.textContent =
-                "비밀번호 조건을 확인해주세요.";
-
-        }
-
-        else if (
-            errorText.includes("email")
-        ) {
-
-            message.textContent =
-                "이메일 주소를 확인해주세요.";
-
-        }
-
-        else {
-
-            message.textContent =
-                "회원가입에 실패했습니다. 입력 내용을 확인해주세요.";
-
-        }
+    document
+    .getElementById(
+        "postContent"
+    )
+    .value = "";
 
 
-        // 중요:
-        // 입력창은 그대로 유지한다.
-        return;
-    }
+    closeModal("writeModal");
 
-
-    if (!data || !data.user) {
-
-        message.className =
-            "message error";
-
-        message.textContent =
-            "회원가입에 실패했습니다.";
-
-        return;
-    }
-
-
-    // 프로필 생성
-    const {
-        error: profileError
-    } = await db
-        .from("profiles")
-        .insert({
-
-            id: data.user.id,
-
-            nickname: nickname,
-
-            badges: [],
-
-            is_admin: false
-
-        });
-
-
-    if (profileError) {
-
-        message.className =
-            "message error";
-
-        message.textContent =
-            "계정은 만들어졌지만 프로필 생성에 실패했습니다. 관리자에게 문의해주세요.";
-
-        return;
-    }
-
-
-    // 성공
-    message.className =
-        "message success";
-
-    message.textContent =
-        "회원가입이 완료되었습니다!";
-
-
-    setTimeout(() => {
-
-        closeModals();
-
-        // 로그인 창으로 이동
-        openLogin();
-
-        // 이메일 자동 입력
-        document.getElementById(
-            "loginEmail"
-        ).value = email;
-
-    }, 1000);
+    renderPosts();
 
 }
+
+
+/* POST LIST */
+
+function renderPosts(){
+
+    const posts =
+        getPosts();
+
+
+    const list =
+        document.getElementById(
+            "postList"
+        );
+
+
+    if(posts.length === 0){
+
+        list.innerHTML = `
+
+            <div class="empty">
+                아직 작성된 글이 없습니다.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    posts.forEach(
+        post => {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className =
+                "post";
+
+
+            div.onclick =
+                function(){
+
+                    showPost(post);
+
+                };
+
+
+            div.innerHTML = `
+
+                <div class="post-title">
+                    ${escapeHTML(post.title)}
+                </div>
+
+                <div class="post-meta">
+                    ${escapeHTML(post.author)}
+                    ·
+                    ${escapeHTML(post.date)}
+                </div>
+
+            `;
+
+
+            list.appendChild(div);
+
+        }
+    );
+
+}
+
+
+/* VIEW POST */
+
+function showPost(post){
+
+    alert(
+        post.title +
+        "\n\n" +
+        post.content +
+        "\n\n작성자: " +
+        post.author
+    );
+
+}
+
+
+/* HTML SAFE */
+
+function escapeHTML(text){
+
+    return String(text)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* COMING SOON */
+
+function showComingSoon(name){
+
+    alert(
+        name +
+        " 기능은 준비 중입니다."
+    );
+
+}
+
+
+/* MODAL BACKGROUND */
+
+document
+.getElementById("loginModal")
+.addEventListener(
+    "click",
+    function(e){
+
+        if(e.target === this){
+            closeModal("loginModal");
+        }
+
+    }
+);
+
+
+document
+.getElementById("signupModal")
+.addEventListener(
+    "click",
+    function(e){
+
+        if(e.target === this){
+            closeModal("signupModal");
+        }
+
+    }
+);
+
+
+document
+.getElementById("writeModal")
+.addEventListener(
+    "click",
+    function(e){
+
+        if(e.target === this){
+            closeModal("writeModal");
+        }
+
+    }
+);
+
+
+/* START */
+
+updateProfileData();
+
+updateUI();
+
+renderPosts();
+
+</script>
+
+</body>
+</html>
