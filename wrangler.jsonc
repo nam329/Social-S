@@ -1,8 +1,2 @@
-{
-  "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "social-s",
-  "compatibility_date": "2026-09-22",
-  "assets": {
-    "directory": "./public"
-  }
-}
+// wrangler.jsonc
+"name": "social-h",
